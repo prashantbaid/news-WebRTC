@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Interactive News Search</title>
+	<link rel="stylesheet" type="text/css" media="all" href="swiperDemo.css" />
+	<meta charset="utf-8">
+	<style>
+	#search {
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+			}
+			#search input {
+				color: #ffffff;
+				background-color: transparent;
+				border: 1px solid #0080ff;
+				padding: 5px;
+				font-size: 10px;
+				text-transform: uppercase;
+				-webkit-border-radius: 0px; /* workaround for ios safari */
+			}
+
+			#search button {
+				color: #0080ff;
+				background-color: transparent;
+				border: 1px solid #0080ff;
+				padding: 5px;
+				font-size: 10px;
+				text-transform: uppercase;
+				cursor: pointer;
+			}
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script>
+	var articlelist=new Array();
+	var titlelist=new Array();
+function initit() {
+	var query = document.getElementById( 'query' );
+	console.log(query.value);
+	console.log("hey");
+       $.getJSON("http://query.yahooapis.com/v1/public/yql?q="+encodeURIComponent("SELECT * FROM feed WHERE url='https://news.google.com/news/feeds?q="+query.value+"&output=rss'")+"&format=json",
+          function(data) {
+          		console.log(data);
+              var id = data.query.results.item;
+              console.log(id);
+              var pageno=["one","two","three","four","five","six","seven","eight"];
+              
+              for(var i=0; i<8; i++) {
+             articlelist[i]=data.query.results.item[i].description;
+             var location = articlelist[i].lastIndexOf('<font size="-1">');
+            // articlelist[i]=articlelist[i].substring(location, articlelist[i].length);
+             titlelist[i]=data.query.results.item[i].title;
+              console.log(data.query.results.item[i].title);
+  
+              $('.book').append('<div class="'+pageno[i]+' page"><div class="pageContents">'+titlelist[i]+'<br>'+articlelist[i]);
+             // $('#titlelist').listview('refresh');
+          }
+          }
+);
+}
+	</script>
+
+</head>
+<body>
+	
+	<div class="content">
+		<span class="control left">&lt;</span>
+		<div class="book">
+			
+		</div>
+		<span class="control right" >&gt;</span>
+	</div>
+<div id="search"><input id="query" type="text" value="cat"><button id="button" onclick="initit()">search</button></div>
+	
+	<script src="modernizr-2.6.2.js"></script>
+	<script src="webcam-swiper-0.1.js"></script>
+	<script src="demo.js"></script>
+	
+</body>
+</html>

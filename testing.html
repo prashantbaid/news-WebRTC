@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Webcam Swiper</title>
+	<link rel="stylesheet" type="text/css" media="all" href="swiperDemo.css" />
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script>
+	var articlelist=new Array();
+	var titlelist=new Array();
+function initit() {
+	console.log("hey");
+       $.getJSON("http://query.yahooapis.com/v1/public/yql?q="+encodeURIComponent("SELECT * FROM feed WHERE url='http://news.google.co.in/news?pz=1&cf=all&ned=in&hl=en&output=rss'")+"&format=json",
+          function(data) {
+          		console.log(data);
+              var id = data.query.results.item;
+              console.log(id);
+              var pageno=["one","two","three","four","five","six","seven","eight"];
+              
+              for(var i=0; i<8; i++) {
+             articlelist[i]=data.query.results.item[i].description;
+             titlelist[i]=data.query.results.item[i].title;
+              console.log(data.query.results.item[i].title);
+  
+              $('.book').append('<div class="'+pageno[i]+' page"><div class="pageContents">'+titlelist[i]+'<br>'+articlelist[i]);
+             // $('#titlelist').listview('refresh');
+          }
+          }
+);
+}
+	</script>
+
+</head>
+<body onload="initit()">
+	
+	<div class="content">
+		<span class="control left">&lt;</span>
+		<div class="book">
+			
+		</div>
+
+	
+</body>
+</html>
